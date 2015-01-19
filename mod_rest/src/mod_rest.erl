@@ -53,7 +53,7 @@ process([], #request{method = 'POST', data = Data, host = Host, ip = ClientIp}) 
 	maybe_post_request(binary_to_list(Data), Host, ClientIp)
     catch
 	error:{badmatch, _} = Error ->
-	    ?DEBUG("Error when processing REST request: ~nData: ~p~nError: ~p, Stacktrace:", [Data, Error, erlang:get_stacktrace()]),
+	    ?DEBUG("Error when processing REST request: ~nData: ~p~nError: ~p, Stacktrace: ~p", [Data, Error, erlang:get_stacktrace()]),
 	    {406, [], <<"Error: REST request is rejected by service.">>}
     end;
 process(Path, Request) ->
@@ -77,13 +77,13 @@ maybe_post_request([$< | _ ] = Data, Host, ClientIp) ->
 	post_request(Stanza, From, To)
     catch
 	error:{badmatch, _} = Error ->
-	    ?DEBUG("Error when processing REST request: ~nData: ~p~nError: ~p, Stacktrace:", [Data, Error, erlang:get_stacktrace()]),
+	    ?DEBUG("Error when processing REST request: ~nData: ~p~nError: ~p, Stacktrace: ~p", [Data, Error, erlang:get_stacktrace()]),
 	    {406, [], "Error: REST request is rejected by service."};
 	error:{Reason, _} = Error ->
-	    ?DEBUG("Error when processing REST request: ~nData: ~p~nError: ~p, Stacktrace:", [Data, Error, erlang:get_stacktrace()]),
+	    ?DEBUG("Error when processing REST request: ~nData: ~p~nError: ~p, Stacktrace: ~p", [Data, Error, erlang:get_stacktrace()]),
 	    {500, [], "Error: " ++ atom_to_list(Reason)};
 	Error ->
-	    ?DEBUG("Error when processing REST request: ~nData: ~p~nError: ~p, Stacktrace:", [Data, Error, erlang:get_stacktrace()]),
+	    ?DEBUG("Error when processing REST request: ~nData: ~p~nError: ~p, Stacktrace: ~p", [Data, Error, erlang:get_stacktrace()]),
 	    {500, [], "Error"}
     end;    
 maybe_post_request(Data, Host, _ClientIp) ->
